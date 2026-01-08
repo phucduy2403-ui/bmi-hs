@@ -1,45 +1,112 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>BMI Mini App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- PWA: gắn manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2196f3">
+    <title>BMI Calculator</title>
+
+    <!-- ✅ PWA: gắn manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .error {
+            color: red;
+        }
+    </style>
 </head>
+
 <body>
 
-  <h1>BMI Mini App</h1>
+    <div class="container">
+        <h2>BMI Calculator</h2>
+        <p>Nhập chiều cao (cm) và cân nặng (kg) để tính BMI.</p>
 
-  <p>Chiều cao (m)</p>
-  <input id="height">
+        <input type="number" id="height" placeholder="Chiều cao (cm, ví dụ: 170)" min="1">
+        <input type="number" id="weight" placeholder="Cân nặng (kg, ví dụ: 65)" min="1">
 
-  <p>Cân nặng (kg)</p>
-  <input id="weight">
+        <button onclick="calculateBMI()">Tính BMI</button>
 
-  <br><br>
-  <button onclick="calc()">Tính BMI</button>
+        <div id="result"></div>
+    </div>
 
-  <p id="result"></p>
+    <script>
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const resultDiv = document.getElementById('result');
 
-  <script>
-    function calc() {
-  const h_cm = document.getElementById("height").value;
-  const w = document.getElementById("weight").value;
+            if (
+                isNaN(height) ||
+                isNaN(weight) ||
+                height <= 0 ||
+                weight <= 0 ||
+                height > 300 ||
+                weight > 500
+            ) {
+                resultDiv.innerHTML =
+                    '<span class="error">Vui lòng nhập số hợp lệ (chiều cao 1–300 cm, cân nặng 1–500 kg).</span>';
+                return;
+            }
 
-  const h = h_cm / 100; // đổi cm → mét
-  const bmi = w / (h * h);
+            const bmi = weight / Math.pow(height / 100, 2);
 
-  document.getElementById("result").innerText =
-    "BMI = " + bmi.toFixed(2);
-}
-    // PWA: đăng ký service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
-    }
-  </script>
+            let status = '';
+            if (bmi < 18.5) status = 'Thiếu cân';
+            else if (bmi < 24.9) status = 'Bình thường';
+            else if (bmi < 29.9) status = 'Thừa cân';
+            else status = 'Béo phì';
+
+            resultDiv.innerHTML =
+                `BMI của bạn: ${bmi.toFixed(2)}<br>Trạng thái: ${status}`;
+        }
+
+        <!-- ✅ PWA: đăng ký service worker -->
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
 
 </body>
 </html>
-
