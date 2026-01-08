@@ -183,6 +183,26 @@ localStorage.setItem("bmiHistory", JSON.stringify(history));
             resultDiv.innerHTML =
                 `BMI của bạn: ${bmi.toFixed(2)}<br>Trạng thái: ${status}`;
         }
+function renderHistory() {
+    const historyList = document.getElementById("history");
+    const history = JSON.parse(localStorage.getItem("bmiHistory")) || [];
+
+    historyList.innerHTML = "";
+
+    if (history.length === 0) {
+        historyList.innerHTML = "<li>Chưa có dữ liệu</li>";
+        return;
+    }
+
+    history.forEach(item => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <strong>${item.bmi}</strong> – ${item.status}<br>
+            <small>${item.time}</small>
+        `;
+        historyList.appendChild(li);
+    });
+}
 
         if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js');
@@ -194,11 +214,13 @@ localStorage.setItem("bmiHistory", JSON.stringify(history));
   });
 }
     </script>
+                renderHistory();
             </div>
         </main>
     </div>
 </body>
 </html>
+
 
 
 
