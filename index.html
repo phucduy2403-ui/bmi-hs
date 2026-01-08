@@ -102,31 +102,20 @@
                 `BMI của bạn: ${bmi.toFixed(2)}<br>Trạng thái: ${status}`;
         }
 
-        <!-- ✅ PWA: đăng ký service worker -->
         if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js').then(reg => {
+  navigator.serviceWorker.register('service-worker.js');
 
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-
-      newWorker.addEventListener('statechange', () => {
-        if (
-          newWorker.state === 'installed' &&
-          navigator.serviceWorker.controller
-        ) {
-          if (confirm("Có bản cập nhật mới. Tải lại ngay?")) {
-            window.location.reload();
-          }
-        }
-      });
-    });
-
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (confirm("Ứng dụng có bản cập nhật mới. Tải lại ngay?")) {
+      window.location.reload();
+    }
   });
 }
     </script>
 
 </body>
 </html>
+
 
 
 
