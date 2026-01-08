@@ -153,6 +153,17 @@ button:active {
             ) {
                 resultDiv.innerHTML =
                     '<span class="error">Vui lòng nhập số hợp lệ (chiều cao 1–300 cm, cân nặng 1–500 kg).</span>';
+                // 🔹 Lưu lịch sử BMI
+const history = JSON.parse(localStorage.getItem("bmiHistory")) || [];
+
+history.unshift({
+    bmi: bmi.toFixed(2),
+    status: status,
+    time: new Date().toLocaleString()
+});
+
+localStorage.setItem("bmiHistory", JSON.stringify(history));
+
                 return;
             }
 
@@ -183,6 +194,7 @@ button:active {
     </div>
 </body>
 </html>
+
 
 
 
