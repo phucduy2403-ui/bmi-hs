@@ -25,12 +25,15 @@
 
   <script>
     function calc() {
-      const h = document.getElementById("height").value;
-      const w = document.getElementById("weight").value;
-      const bmi = w / (h * h);
-      document.getElementById("result").innerText = "BMI = " + bmi.toFixed(2);
-    }
+  const h_cm = document.getElementById("height").value;
+  const w = document.getElementById("weight").value;
 
+  const h = h_cm / 100; // đổi cm → mét
+  const bmi = w / (h * h);
+
+  document.getElementById("result").innerText =
+    "BMI = " + bmi.toFixed(2);
+}
     // PWA: đăng ký service worker
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
@@ -39,3 +42,4 @@
 
 </body>
 </html>
+
